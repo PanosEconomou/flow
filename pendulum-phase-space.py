@@ -22,7 +22,7 @@ def step_u(u, a:float, b:float, h:float=1e-1):
 
 # Given a starting point in phase space, find where it ends
 @ti.func
-def evolve(u0, a:float, b:float, h:float, max_iter:int=2000, threshold:float=1e-4):
+def evolve(u0, a:float, b:float, h:float, max_iter:int=1500, threshold:float=1e-3):
     u       = u0
     i       = 0
     # run     = True
@@ -49,10 +49,8 @@ gui     = ti.GUI("A Phase space", res = (n*2,n), fast_gui=True)
 # A colormap
 @ti.func
 def colormap(u,L):
-    # map scalar in [0, 1] to RGB (simple blue-to-red gradient)
     val  = (tm.clamp(u.x, -2*L, 2*L) + 2*L)/(4*L)
-    # val0 = (tm.clamp(u0.y, -2*L, 2*L) + 2*L)/(4*L)
-    return tm.vec3([val, (1 - ti.min(u.z,2000)/2000) , val])
+    return tm.vec3([val, (1 - ti.min(u.z,1500)/1500) , val])
     
 # Color each pixel
 @ti.kernel
@@ -65,8 +63,10 @@ def paint(a:float, b:float, L:float, n:int):
 # Now draw the animation
 A = linspace(0.0001,1,frames)
 i = 0
+b = 2
+paused = False
 
-while gui.running:
+while gui.running:    
     paint(A[int(abs(i - frames + 1))],2,L,n)
     i = (i + 1)%(2*(frames-1))
     gui.set_image(pixels)
