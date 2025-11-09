@@ -22,7 +22,7 @@ def step_u(u, a:float, b:float, h:float=1e-1):
 
 # Given a starting point in phase space, find where it ends
 @ti.func
-def evolve(u0, a:float, b:float, h:float, max_iter:int=1500, threshold:float=1e-3):
+def evolve(u0, a:float, b:float, h:float, max_iter:int=2000, threshold:float=1e-3):
     u       = u0
     i       = 0
     # run     = True
