@@ -44,7 +44,9 @@ frames  = 200                                   # Number of frames
 n       = 500                                   # Number of Pixels
 L       = 3*pi                                  # Length to look at
 pixels  = ti.Vector.field(3,ti.f32, (2*n,n))    # Stores the color of each pixel
-gui     = ti.GUI("A Phase space", res = (n*2,n), fast_gui=True)
+window  = ti.ui.Window("2D Waves", res=(2*n, n), fps_limit=400)
+gui = window.get_canvas()
+# gui     = ti.GUI("A Phase space", res = (2*n,n), fast_gui=True) # type: ignore
 
 # A colormap
 @ti.func
@@ -66,8 +68,8 @@ i = 0
 b = 2
 paused = False
 
-while gui.running:    
+while window.running:    
     paint(A[int(abs(i - frames + 1))],2,L,n)
     i = (i + 1)%(2*(frames-1))
     gui.set_image(pixels)
-    gui.show()
+    window.show()
